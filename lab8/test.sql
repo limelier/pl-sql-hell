@@ -1,4 +1,4 @@
-create or replace directory mydir as '/student';
+create or replace directory mydir as '/data/student';
 
 declare
     v_fisier utl_file.file_type;
