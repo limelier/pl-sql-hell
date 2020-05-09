@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="63afb95b-4b4f-4ca9-8dc8-8006450c3199" name="Default Changelist" comment="" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ProjectId" id="1YsvMk9p1o9QkF7SIlCSpIyZXDG" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showExcludedFiles" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="aspect.path.notification.shown" value="true" />
+  </component>
+  <component name="RunManager">
+    <configuration name="Main" type="Application" factoryName="Application" temporary="true">
+      <option name="MAIN_CLASS_NAME" value="com.company.Main" />
+      <module name="ShoppingCart2" />
+      <option name="WORKING_DIRECTORY" value="file://$PROJECT_DIR$" />
+      <RunnerSettings RunnerId="Run" />
+      <ConfigurationWrapper RunnerId="Run" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="63afb95b-4b4f-4ca9-8dc8-8006450c3199" name="Default Changelist" comment="" />
+      <created>1583744070351</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1583744070351</updated>
+      <workItem from="1583744076079" duration="79000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="1" />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="738" y="258" width="424" height="511" key="FileChooserDialogImpl" timestamp="1583744150017">
+      <screen x="0" y="0" width="1920" height="1032" />
+    </state>
+    <state x="738" y="258" width="424" height="511" key="FileChooserDialogImpl/0.0.1920.1032@0.0.1920.1032" timestamp="1583744150017" />
+    <state x="269" y="99" width="1372" height="832" key="new project wizard" timestamp="1583744152207">
+      <screen x="0" y="0" width="1920" height="1032" />
+    </state>
+    <state x="269" y="99" width="1372" height="832" key="new project wizard/0.0.1920.1032@0.0.1920.1032" timestamp="1583744152207" />
+  </component>
+</project>
