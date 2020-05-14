@@ -9,6 +9,20 @@ async function post(email, hash) {
     )
 }
 
+async function exists(hash) {
+    const conn = await oracledb.getConnection();
+    const result = await conn.execute(
+        `select count(1)
+        from test_users
+        where hash = :hash`,
+        {
+            hash
+        }
+    );
+    return result.rows[0][0] > 0;
+}
+
 module.exports = {
     post,
+    exists,
 }
