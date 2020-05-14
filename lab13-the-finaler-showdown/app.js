@@ -14,6 +14,7 @@ const config = require('./config').express;
         return;
     }
     const app = express();
+    app.use(express.json())
     app.use(router);
 
     app.listen(config.port, (err) => {
