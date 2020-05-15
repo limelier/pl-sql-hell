@@ -19,11 +19,11 @@ create sequence tests_seq start with 1;
 create table test_entries
 (
     id              number primary key,
-    test_id         number, -- test it belongs to
-    question_id     varchar2(8), -- the id of the question it presents in INTREBARI
+    test_id         number,                       -- test it belongs to
+    question_id     varchar2(8),                  -- the id of the question it presents in INTREBARI
     answered        number(1) default 0 not null, -- 0 if not yet answered, 1 if already answered
-    score           number, -- the score obtained for the question
-    correct_answers number, -- the number of correct answers the test entry has, used for score calculation
+    score           number,                       -- the score obtained for the question
+    correct_answers number,                       -- the number of correct answers the test entry has, used for score calculation
     foreign key (test_id) references tests
 );
 create sequence test_entries_seq start with 1;
@@ -31,7 +31,7 @@ create sequence test_entries_seq start with 1;
 create table test_answers
 (
     id        number primary key,
-    entry_id  number, -- test entry with the question the answer is for
+    entry_id  number,      -- test entry with the question the answer is for
     answer_id varchar2(8), -- the id of the answer in RASPUNSURI
     foreign key (entry_id) references test_entries (id)
 );
@@ -59,6 +59,7 @@ create or replace function next_question(mail varchar2, answer varchar2) return 
     q_text                   varchar2(1000);
     v_return                 varchar2(4000);
 begin
+    insert into next_question_call_logs values (mail, answer, sysdate);
     -- stop immediately on null email
     if mail is null
     then
@@ -134,7 +135,7 @@ begin
             end loop;
 
         v_return := substr(v_return, 1, (length(v_return) - 1));
-        v_return := v_return || '}]';
+        v_return := v_return || ']}';
         return v_return;
         -- otherwise, return the score for the test
     else
@@ -164,7 +165,8 @@ begin
     select id, score, correct_answers, answered
     into te_id, te_score, te_corr, te_answered
     from test_entries
-    where question_id = q_id;
+    where question_id = q_id
+      and test_id = t_id;
 
     -- if it hasn't already been answered, we answer it with the given answer IDs
     if te_answered = 0
@@ -296,7 +298,7 @@ end;
 declare
     v varchar2(4000);
 begin
-    v := next_question('test@test.test', '');
+    v := next_question('test@testify.com', null);
     -- example with answer:
 --     v := next_question('test@test.test', 'Q6:A53,A52');
     dbms_output.put_line(v);
