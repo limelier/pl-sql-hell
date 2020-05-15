@@ -1,10 +1,9 @@
 const crypto = require('crypto');
 const db = require('../db').user;
 
-const hash = crypto.createHash('sha256');
-
 function hashEmail(email) {
-    return hash
+    return crypto
+        .createHash('sha256')
         .update(email + Date.now())
         .digest('hex');
 }
