@@ -35,17 +35,28 @@ class RegisterForm extends React.Component {
 }
 
 class Question extends React.Component {
+    constructor(props) {
+        super(props);
+        this.handleCheckboxChange = this.handleCheckboxChange.bind(this);
+    }
+
+    handleCheckboxChange(event) {
+        this.props.handleCheckboxChange(event.target.value);
+    }
+
     render() {
         let {q_text, answers} = this.props.question;
         if (!answers) {
             answers = [];
         }
 
-
-        const answerButtons = answers.map(({a_id, a_text}) => {
+        const choices = answers.map(({a_id, a_text}) => {
             return (
                 <li key={a_id}>
-                    <button>{a_text}</button>
+                    <label>
+                        <input type="checkbox" name="choice" value={a_id} onChange={this.handleCheckboxChange}/>
+                        {a_text}
+                    </label>
                 </li>
             )
         })
@@ -53,7 +64,10 @@ class Question extends React.Component {
         return (
             <div>
                 <p className="question-text">{q_text}</p>
-                <ol>{answerButtons}</ol>
+                <form onSubmit={this.props.handleQuestionSubmit}>
+                    <ul>{choices}</ul>
+                    <input type="submit" value="submit"/>
+                </form>
             </div>
         )
     }
@@ -73,10 +87,13 @@ class Base extends React.Component {
             haveAccount,
             question: {},
             finalScore: undefined,
+            choices: [],
         }
 
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+        this.handleCheckboxChange = this.handleCheckboxChange.bind(this);
+        this.handleQuestionSubmit = this.handleQuestionSubmit.bind(this);
     }
 
     async componentDidMount() {
@@ -86,17 +103,22 @@ class Base extends React.Component {
     async updateQuestion() {
         let result = {};
         try {
-            result = await getQuestion(this.state.email, this.state.hash);
+            result = await getQuestion(this.state.email, this.state.hash, {
+                question: this.state.question?.q_id,
+                choices: this.state.choices,
+            });
         } catch (err) {
             console.log(err);
         }
+        console.log(result);
         if (result.q_id) {
             this.setState({
                 question: result,
+                choices: [],
             })
-        } else if (result.score) {
+        } else if (result.result) {
             this.setState({
-                finalScore: result.score,
+                finalScore: result.result,
             })
         }
     }
@@ -125,12 +147,35 @@ class Base extends React.Component {
             });
     }
 
+    handleCheckboxChange(a_id) {
+        const choices = this.state.choices.slice();
+        const index = choices.indexOf(a_id);
+        if (index !== -1) {
+            choices.splice(index, 1);
+        } else {
+            choices.push(a_id);
+        }
+        this.setState({
+           choices
+        });
+    }
+
+    async handleQuestionSubmit(event) {
+        event.preventDefault();
+        await this.updateQuestion();
+    }
+
     render() {
-        const {email, haveAccount, question} = this.state;
+        const {email, haveAccount, question, finalScore} = this.state;
         if (haveAccount) {
-            return (
-                <Question question={question}/>
-            );
+            if (finalScore) {
+                return <span className="score">Final score: <b>{finalScore}</b></span>
+            } else {
+                return (
+                    <Question question={question} handleCheckboxChange={this.handleCheckboxChange}
+                              handleQuestionSubmit={this.handleQuestionSubmit}/>
+                );
+            }
         } else {
             return (
                 <RegisterForm email={email} handleChange={this.handleChange} handleSubmit={this.handleSubmit}/>
@@ -150,7 +195,11 @@ function saveToLocalStorage(response) {
     localStorage.setItem('hash', hash);
 }
 
-async function getQuestion(email, hash) {
-    const res = await axios.post(apiURL + '/api/questions', {email, hash});
+async function getQuestion(email, hash, answer) {
+    const data = {email, hash};
+    if (answer.question) {
+        data.answer = answer;
+    }
+    const res = await axios.post(apiURL + '/api/questions', data);
     return res.data;
 }
