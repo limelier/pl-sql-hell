@@ -20,9 +20,9 @@ class RegisterForm extends React.Component {
         return (
             <form onSubmit={this.props.handleSubmit}>
                 <label>
-                    Email:
                     <input
                         type="email"
+                        required
                         value={email}
                         onChange={this.handleChange}
                         placeholder="someone@domain.com"
@@ -40,6 +40,7 @@ class Question extends React.Component {
         if (!answers) {
             answers = [];
         }
+
 
         const answerButtons = answers.map(({a_id, a_text}) => {
             return (
@@ -78,8 +79,8 @@ class Base extends React.Component {
         this.handleSubmit = this.handleSubmit.bind(this);
     }
 
-    componentDidMount() {
-        this.updateQuestion().then();
+    async componentDidMount() {
+        await this.updateQuestion();
     }
 
     async updateQuestion() {
@@ -91,11 +92,11 @@ class Base extends React.Component {
         }
         if (result.q_id) {
             this.setState({
-                question: result
+                question: result,
             })
         } else if (result.score) {
             this.setState({
-                finalScore: result.score
+                finalScore: result.score,
             })
         }
     }
@@ -106,20 +107,22 @@ class Base extends React.Component {
         })
     }
 
-    async handleSubmit(event) {
+    handleSubmit(event) {
         event.preventDefault();
         axios.post(apiURL + '/api/users', {email: this.state.email})
-            .then((result) => {
+            .then(async (result) => {
                 saveToLocalStorage(result);
                 this.setState({
                     haveAccount: true,
+                    email: result.data.email,
+                    hash: result.data.hash,
                 });
+                await this.updateQuestion();
             })
             .catch((err) => {
                 console.log(err);
                 alert("A problem occurred.");
             });
-        this.updateQuestion().then();
     }
 
     render() {
