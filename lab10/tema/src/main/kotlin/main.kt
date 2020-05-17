@@ -15,6 +15,7 @@ fun printTheStudent(rs: ResultSet) {
 
 fun sqlInjection(conn: Connection, userInput: String) {
     val sql = "select nume || ' ' || prenume as name, data_nastere from studenti where nr_matricol = '$userInput'"
+    println(sql)
     val statement = conn.createStatement()
     val rs = statement.executeQuery(sql)
     printTheStudent(rs)
@@ -38,6 +39,8 @@ fun main() {
     // normal usage
     sqlInjection(conn, "499GX0")
     noSqlInjection(conn, "499GX0")
+
+    println()
 
     // malicious usage
     sqlInjection(conn, "x' or nume || ' ' || prenume = 'Cobuz Claudia")
